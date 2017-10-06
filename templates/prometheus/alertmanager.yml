@@ -1,0 +1,16 @@
+global:
+  slack_api_url: '<slack_webhook_url>'
+
+route:
+- receiver: 'slack-notifications'
+  group_by: [alertname, datacenter, app]
+
+receivers:
+- name: 'slack-notifications'
+  slack_configs:
+  - channel: '#alerts'
+    text: '{{ template "slack.myorg.text" . }}'
+    text: "<!channel> \nsummary: {{ .CommonAnnotations.summary }}\ndescription: {{ .CommonAnnotations.description }}"
+
+templates:
+- '/etc/alertmanager/templates/myorg.tmpl'
